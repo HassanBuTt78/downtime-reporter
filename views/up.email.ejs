@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Uptime Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #5bc0de;
+        }
+
+        p {
+            color: #333333;
+        }
+
+        .timestamp {
+            color: #777777;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        a {
+            color: #337ab7;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #dddddd;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Website Is Back Online</h2>
+        <p>Hello <%= website.user.name %>,</p>
+        <p>We are pleased to inform you that the downtime issue on <%= website.name %> has been resolved. The website is
+                now back online and fully operational.</p>
+        <p>You can visit the website at: <a href=<%=website.url %> > <%= website.url %></a></p>
+        <p>Downtime started at <b>
+                <%=Date(website.downtime.start)%>
+            </b>
+        </p>
+        <p>
+            Ended at <b>
+                <%= Date(website.downtime.end) %>
+            </b></p>
+        <p class="timestamp">Timestamp: <%=Date.now()%>
+        </p>
+        <div class="footer">
+            <p>This message was sent by the Uptime Notifier.</p>
+        </div>
+    </div>
+</body>
+
+</html>
