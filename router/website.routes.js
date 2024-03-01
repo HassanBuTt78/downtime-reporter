@@ -11,7 +11,7 @@ router.post(
     [userAuthorize, validator(validationSchemas.website)],
     websiteController.newWebsite
 );
-
+router.delete("/:websiteId", [userAuthorize], websiteController.removeWebsite);
 router.get("/:websiteId", [userAuthorize], websiteController.getWebsiteData);
 router.use("/analytics", analyticsRouter);
 

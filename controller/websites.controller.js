@@ -3,6 +3,7 @@ const logActions = require("../database/log-actions");
 const Downtime = require("../model/Downtimes");
 const { structureRange } = require("../utils/restructure");
 const monitoringService = require("../services/monitor.service");
+const CustomError = require("../utils/custom-error");
 
 const websiteController = {
     newWebsite: async (req, res) => {
@@ -17,6 +18,23 @@ const websiteController = {
             success: true,
             message: "your website is being monitored",
             data: newDoc,
+        });
+    },
+    removeWebsite: async (req, res) => {
+        const userId = req.userData._id;
+        const websiteId = req.params.websiteId;
+        const websiteData = await websiteActions.getWebsite({
+            _id: websiteId,
+            user: userId,
+        });
+
+        await monitoringService.removeCronJob(websiteData._id);
+        await websiteData.deleteOne();
+
+        res.json({
+            success: true,
+            message: "Website is removed successfully",
+            data: websiteData,
         });
     },
     getWebsiteData: async (req, res) => {

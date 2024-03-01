@@ -1,6 +1,9 @@
 const { pingSite } = require("../controller/axios.controller");
 const websiteActions = require("../database/website-actions");
 const cron = require("node-cron");
+const CustomError = require("../utils/custom-error");
+
+const currentCronJobs = {};
 
 const startMonitoring = async (interval = "* * * * *") => {
     const iterator = await websiteActions.getIterator();
@@ -9,9 +12,10 @@ const startMonitoring = async (interval = "* * * * *") => {
         if (website === null) {
             break;
         }
-        cron.schedule(interval, async () => {
+        const job = cron.schedule(interval, async () => {
             await pingSite(website);
         });
+        currentCronJobs[website._id] = job;
     }
 };
 
@@ -20,12 +24,18 @@ function sleep(ms) {
 }
 
 const addToMonitoring = async (website) => {
-    return cron.schedule("* * * * *", async () => {
+    const job = cron.schedule("*/15 * * * *", async () => {
         await pingSite(website);
     });
+    currentCronJobs[website._id] = job;
+};
+
+const removeCronJob = async (websiteId) => {
+    return currentCronJobs[websiteId]?.stop();
 };
 
 module.exports = {
     startMonitoring,
     addToMonitoring,
+    removeCronJob,
 };
